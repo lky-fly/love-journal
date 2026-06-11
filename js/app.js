@@ -354,19 +354,24 @@ async function appendToGitHub(path, newItem, commitMsg) {
   const repo = config.repoName;
   const branch = config.repoBranch || 'main';
 
-  // 读取当前文件
-  const getUrl = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}`;
+  // 读取当前文件（加时间戳破缓存）
+  const getUrl = `https://api.github.com/repos/${repo}/contents/${path}?ref=${branch}&_=${Date.now()}`;
   const getResp = await fetch(getUrl, {
     headers: {
       'Authorization': 'token ' + gitHubToken,
-      'Accept': 'application/vnd.github.v3+json'
+      'Accept': 'application/vnd.github.v3+json',
+      'Cache-Control': 'no-cache'
     }
   });
   if (!getResp.ok) throw new Error('读取文件失败: ' + getResp.status);
   const fileData = await getResp.json();
   const content = JSON.parse(atob(fileData.content));
   content.push(newItem);
-  const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(content, null, 2))));
+
+  // base64 编码
+  const encoder = new TextEncoder();
+  const bytes = encoder.encode(JSON.stringify(content, null, 2));
+  const newContent = btoa(String.fromCharCode(...bytes));
 
   // 更新文件
   const putUrl = `https://api.github.com/repos/${repo}/contents/${path}`;
