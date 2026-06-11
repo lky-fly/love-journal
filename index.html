@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=2">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
 </head>
 <body>
@@ -91,14 +91,54 @@
 
     <!-- ===== 照片页 ===== -->
     <main id="page-photos" class="page hidden">
+      <div class="album-bar" id="album-bar"></div>
       <div class="photos-grid" id="photos-grid">
         <div class="chat-loading">翻找照片中...</div>
       </div>
+      <button class="fab" id="photo-add-btn" title="添加照片">+</button>
+      <button class="expand-btn hidden" id="photo-expand-btn" onclick="togglePhotosExpand()">展开</button>
       <div id="photo-lightbox" class="lightbox hidden" onclick="closeLightbox()">
         <img id="lightbox-img" src="" alt="">
         <p id="lightbox-caption"></p>
         <p id="lightbox-date"></p>
         <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      </div>
+      <!-- 上传照片弹窗 -->
+      <div id="photo-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+          <h3 class="modal-title">添加照片</h3>
+          <div class="modal-field">
+            <label class="modal-label">选择照片</label>
+            <div class="photo-upload-area" id="photo-drop-area">
+              <input type="file" id="photo-file-input" accept="image/*" capture="environment" style="display:none">
+              <div class="photo-upload-placeholder" id="photo-upload-placeholder">
+                <span class="photo-upload-icon">📷</span>
+                <span>点击选择照片或拖拽到此处</span>
+              </div>
+              <img id="photo-upload-preview" src="" alt="" style="display:none">
+            </div>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="photo-caption-input">描述</label>
+            <input type="text" id="photo-caption-input" class="modal-input" placeholder="这张照片的故事..." maxlength="200">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label">相册</label>
+            <div class="album-select-row">
+              <select id="photo-album-select" class="modal-input album-select"></select>
+              <button class="album-new-btn" onclick="promptNewAlbum()" title="新建相册">+</button>
+            </div>
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="photo-date-input">日期</label>
+            <input type="date" id="photo-date-input" class="modal-input">
+          </div>
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closePhotoModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" id="photo-upload-btn" disabled>上传</button>
+          </div>
+          <div class="modal-tip" id="photo-upload-tip"></div>
+        </div>
       </div>
     </main>
 
@@ -106,6 +146,34 @@
     <main id="page-timeline" class="page hidden">
       <div class="timeline" id="timeline-list">
         <div class="chat-loading">画时间线中...</div>
+      </div>
+      <button class="fab" id="timeline-add-btn" title="添加事件">+</button>
+      <!-- 添加事件弹窗 -->
+      <div id="timeline-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+          <h3 class="modal-title">添加事件</h3>
+          <div class="modal-field">
+            <label class="modal-label" for="timeline-date-input">日期</label>
+            <input type="date" id="timeline-date-input" class="modal-input">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="timeline-emoji-input">图标</label>
+            <input type="text" id="timeline-emoji-input" class="modal-input emoji-input" placeholder="💖" maxlength="2">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="timeline-title-input">标题</label>
+            <input type="text" id="timeline-title-input" class="modal-input" placeholder="发生了什么..." maxlength="100">
+          </div>
+          <div class="modal-field">
+            <label class="modal-label" for="timeline-desc-input">描述</label>
+            <textarea id="timeline-desc-input" class="modal-input modal-textarea" placeholder="详细描述一下..." rows="3" maxlength="500"></textarea>
+          </div>
+          <div class="modal-actions">
+            <button class="modal-btn modal-btn-cancel" onclick="closeTimelineModal()">取消</button>
+            <button class="modal-btn modal-btn-confirm" id="timeline-save-btn" disabled>保存</button>
+          </div>
+          <div class="modal-tip" id="timeline-save-tip"></div>
+        </div>
       </div>
     </main>
 
@@ -130,6 +198,6 @@
     </nav>
   </div>
 
-  <script src="js/app.js?v=4"></script>
+  <script src="js/app.js?v=9"></script>
 </body>
 </html>
