@@ -353,19 +353,27 @@ async function sendMessage() {
   }
 }
 
-// ===== GitHub API（通过本地 /proxy 中转，绕过 GFW）=====
+// ===== GitHub API（优先走本地 /proxy，不可用时直连）=====
 async function githubRequest(url, options = {}) {
-  const resp = await fetch('/proxy', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      url: url,
-      method: options.method || 'GET',
-      headers: options.headers || {},
-      body: options.body || null
-    })
-  });
-  return resp;
+  try {
+    const resp = await fetch('/proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        url: url,
+        method: options.method || 'GET',
+        headers: options.headers || {},
+        body: options.body || null
+      })
+    });
+    if (resp.ok || resp.status >= 400) return resp;
+  } catch (e) {
+    console.log('代理不可用，直连 GitHub API');
+  }
+  // 回退：直连 GitHub API
+  const fetchOpts = { method: options.method || 'GET', headers: options.headers || {} };
+  if (options.body) fetchOpts.body = options.body;
+  return fetch(url, fetchOpts);
 }
 
 async function uploadFileToGitHub(path, base64Content, commitMsg) {
