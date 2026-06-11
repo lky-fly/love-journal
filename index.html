@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Mr. Li ♥ Mrs. Huang</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+</head>
+<body>
+
+  <!-- ===== 花瓣容器 ===== -->
+  <div id="petals" aria-hidden="true"></div>
+
+  <!-- ===== 登录界面 ===== -->
+  <div id="login-screen" class="screen">
+    <div class="login-card">
+      <div class="login-photo-frame">
+        <img id="login-photo" src="" alt="">
+      </div>
+      <h1 class="login-title">Mr. Li &amp; Mrs. Huang</h1>
+      <p class="login-sub">Est. 2026</p>
+      <div class="login-field">
+        <input type="password" id="login-pwd" class="login-input" placeholder="密码" maxlength="32">
+        <button id="login-btn" class="login-btn">进入</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 主应用 ===== -->
+  <div id="app" class="screen hidden">
+
+    <!-- 顶部栏 -->
+    <header class="topbar">
+      <span class="topbar-title">Mr. Li ♥ Mrs. Huang</span>
+      <button id="logout-btn" class="btn-icon" title="离开">🚪</button>
+    </header>
+
+    <!-- ===== 首页 ===== -->
+    <main id="page-home" class="page">
+      <div class="home-hero">
+        <div class="home-days-card">
+          <p class="home-days-label">在一起</p>
+          <p class="home-days-number" id="days-count">--</p>
+          <p class="home-days-label">天</p>
+        </div>
+        <p class="home-couple" id="home-couple-name"></p>
+        <p class="home-since" id="home-since"></p>
+      </div>
+
+      <div class="home-cards">
+        <div class="home-card" onclick="switchPage('chat')">
+          <span class="home-card-icon">💬</span>
+          <span class="home-card-title">悄悄话</span>
+          <span class="home-card-arrow">→</span>
+        </div>
+        <div class="home-card" onclick="switchPage('photos')">
+          <span class="home-card-icon">📷</span>
+          <span class="home-card-title">照片墙</span>
+          <span class="home-card-arrow">→</span>
+        </div>
+        <div class="home-card" onclick="switchPage('timeline')">
+          <span class="home-card-icon">📍</span>
+          <span class="home-card-title">时间线</span>
+          <span class="home-card-arrow">→</span>
+        </div>
+      </div>
+
+      <div class="home-next">
+        <p class="home-next-label">下一个纪念日</p>
+        <p class="home-next-date" id="next-anniversary">--</p>
+      </div>
+    </main>
+
+    <!-- ===== 聊天页 ===== -->
+    <main id="page-chat" class="page hidden">
+      <div class="chat-container" id="chat-messages">
+        <div class="chat-loading">翻找回忆中...</div>
+      </div>
+      <div class="chat-input-bar">
+        <textarea id="chat-input" class="chat-input" placeholder="说点什么..." rows="1" maxlength="500"></textarea>
+        <button id="chat-send" class="chat-send-btn" disabled>发送</button>
+      </div>
+      <div class="chat-tip" id="chat-tip">
+        发送消息需要配置 GitHub Token（见 README）
+      </div>
+    </main>
+
+    <!-- ===== 照片页 ===== -->
+    <main id="page-photos" class="page hidden">
+      <div class="photos-grid" id="photos-grid">
+        <div class="chat-loading">翻找照片中...</div>
+      </div>
+      <div id="photo-lightbox" class="lightbox hidden" onclick="closeLightbox()">
+        <img id="lightbox-img" src="" alt="">
+        <p id="lightbox-caption"></p>
+        <p id="lightbox-date"></p>
+        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+      </div>
+    </main>
+
+    <!-- ===== 时间线页 ===== -->
+    <main id="page-timeline" class="page hidden">
+      <div class="timeline" id="timeline-list">
+        <div class="chat-loading">画时间线中...</div>
+      </div>
+    </main>
+
+    <!-- 底部导航 -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-page="home" onclick="switchPage('home')">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">首页</span>
+      </button>
+      <button class="nav-btn" data-page="chat" onclick="switchPage('chat')">
+        <span class="nav-icon">💬</span>
+        <span class="nav-label">悄悄话</span>
+      </button>
+      <button class="nav-btn" data-page="photos" onclick="switchPage('photos')">
+        <span class="nav-icon">📷</span>
+        <span class="nav-label">照片</span>
+      </button>
+      <button class="nav-btn" data-page="timeline" onclick="switchPage('timeline')">
+        <span class="nav-icon">📍</span>
+        <span class="nav-label">时光</span>
+      </button>
+    </nav>
+  </div>
+
+  <script src="js/app.js?v=3"></script>
+</body>
+</html>
